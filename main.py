@@ -37,7 +37,7 @@ if __name__ == '__main__':
         while True:
             try:
                 shop = b.find_element_by_id('merchant-info').text
-                shop = shop.split('が販売')[0].split('この商品は、')[1]
+                shop = shop.split('For sale')[0].split('This product is、')[1]
 
                 if ACCEPT_SHOP not in shop:
                     raise Exception("not Amazon.")
@@ -49,7 +49,7 @@ if __name__ == '__main__':
                 b.refresh()
 
         # Purchase
-        b.get('https://www.amazon.co.jp/gp/cart/view.html/ref=nav_cart')
+        b.get('https://www.amazon.co.uk/gp/cart/view.html/ref=nav_cart')
         b.find_element_by_name('proceedToCheckout').click()
 
         # Login
@@ -64,7 +64,7 @@ if __name__ == '__main__':
         # Confirmation of price
         p = b.find_element_by_css_selector('td.grand-total-price').text
         if int(p.split(' ')[1].replace(',', '')) > LIMIT_VALUE:
-            l('PLICE IS TOO LARGE.')
+            l('PRICE IS TOO LARGE.')
             continue
 
         # Confirmation of order
