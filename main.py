@@ -15,7 +15,7 @@ LOGIN_MAIL = os.environ.get("MAIL_ADDRESS")
 LOGIN_PASSWORD = os.environ.get("PASSWORD")
 ITEM_URL = os.environ.get("ITEM_URL")
 ACCEPT_SHOP = 'Amazon'
-LIMIT_VALUE = 33500    # 最低金額
+LIMIT_VALUE = 33500    # Minimum amount
 
 
 def l(str):
@@ -24,7 +24,7 @@ def l(str):
 
 if __name__ == '__main__':
 
-    # ブラウザの起動
+    # Launch browser
     try:
         b = webdriver.Chrome('./chromedriver')
         b.get(ITEM_URL)
@@ -33,7 +33,7 @@ if __name__ == '__main__':
         exit()
 
     while True:
-        # 在庫確認
+        # Inventory check
         while True:
             try:
                 shop = b.find_element_by_id('merchant-info').text
@@ -48,11 +48,11 @@ if __name__ == '__main__':
                 time.sleep(60)
                 b.refresh()
 
-        # 購入手続き
+        # Purchase
         b.get('https://www.amazon.co.jp/gp/cart/view.html/ref=nav_cart')
         b.find_element_by_name('proceedToCheckout').click()
 
-        # ログイン
+        # Login
         try:
             b.find_element_by_id('ap_email').send_keys(LOGIN_MAIL)
             b.find_element_by_id('ap_password').send_keys(LOGIN_PASSWORD)
@@ -61,13 +61,13 @@ if __name__ == '__main__':
             l('LOGIN PASS.')
             pass
 
-        # 値段の確認
+        # Confirmation of price
         p = b.find_element_by_css_selector('td.grand-total-price').text
         if int(p.split(' ')[1].replace(',', '')) > LIMIT_VALUE:
             l('PLICE IS TOO LARGE.')
             continue
 
-        # 注文の確定
+        # Confirmation of order
         b.find_element_by_name('placeYourOrder1').click()
         break
 
